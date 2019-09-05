@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Account = require('./api/account/create')
+const Notification = require('./api/notifications/notifications')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true })
 app.use(bodyParser.json());
 
 app.use('/account/create', Account);
+app.use('/notifications', Notification);
 
 
 app.listen(port, () =>
