@@ -3,7 +3,7 @@ const router = express.Router();
 //Notification Model
 const Notification = require("../../models/notification/notification");
 
-//@route POST api/notifications
+//@route POST /notifications
 router.post("/", async (req, res) => {
     const { accountId, name, color } = req.body;
 
@@ -11,6 +11,23 @@ router.post("/", async (req, res) => {
     await notification.save();
     return res.send({ message: "success" });
 });
+//@route GET /notifications?accountId
+router.get("/", (req, res) => {
 
+    const accountId = req.query.accountId;
+    Notification.find({ accountId })
+        .then(doc => {
+            console.log("Notifications from the database", doc);
+            if (doc) {
+                res.status(200).json(doc);
+            } else {
+                res.status(404).json({ message: "was not found data for this ID" });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
+});
 
 module.exports = router;
