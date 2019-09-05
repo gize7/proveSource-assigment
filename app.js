@@ -1,18 +1,27 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/codeTest', {
-	autoReconnect: true,
-	reconnectTries: 60,
-	reconnectInterval: 10000
-});
+const bodyParser = require('body-parser');
+const Account = require('./api/account/create')
 
 const app = express();
-app.listen(3000);
+const port = process.env.PORT || 3000;
 
-app.use(require('body-parser').json());
-app.use('/account/create', require('./api/account/create'));
+require('dotenv').config();
 
-console.log('app running on port 3000...');
+mongoose.connect(process.env.DATABASE, { useNewUrlParser: true })
+	.then(() => {
+		console.log('connected successfully')
+	})
+	.catch(() => {
+		console.log('Connection failed');
+	})
+
+app.use(bodyParser.json());
+
+app.use('/account/create', Account);
+
+
+app.listen(port, () =>
+	console.log(`listening on http://localhost:${port}`));
 
 module.exports = app;
