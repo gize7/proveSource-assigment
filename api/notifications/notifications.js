@@ -30,4 +30,22 @@ router.get("/", (req, res) => {
         });
 });
 
+//@route DELETE /notifications?accountId={id}&color={color}"
+router.delete("/", (req, res) => {
+    const accountId = req.query.accountId;
+    const color = req.query.color;
+    Notification.deleteMany({ accountId, color })
+        .then(result => {
+            if (result.n > 0) {
+                res.status(200).json(result);
+            }
+        })
+        .catch(err => {
+            res.status().json({
+                error: err
+            });
+        });
+
+});
+
 module.exports = router;
